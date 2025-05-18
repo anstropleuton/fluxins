@@ -12,6 +12,7 @@
 #include <cstddef>
 #include <functional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "fluxins/code.hpp"

@@ -18,6 +18,11 @@ else()
     option(BUILD_PACKAGE "Build package" OFF)
 endif()
 
+find_program(IWYU_PATH NAMES include-what-you-use iwyu)
+if(IWYU_PATH)
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_PATH}")
+endif()
+
 add_subdirectory(source)
 
 if(BUILD_PACKAGE)

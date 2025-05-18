@@ -14,6 +14,7 @@
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
+#include <format>
 
 #include "fluxins/config.hpp"
 #include "fluxins/error.hpp"
