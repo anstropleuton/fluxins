@@ -19,7 +19,6 @@ install(TARGETS fluxins
     RUNTIME DESTINATION bin
 )
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/include" DESTINATION "include")
-install(DIRECTORY "${CMAKE_BINARY_DIR}/include" DESTINATION "include")
 install(EXPORT fluxins_EXPORT
     FILE "fluxins-config.cmake"
     NAMESPACE fluxins::
@@ -36,15 +35,6 @@ configure_file(
     @ONLY
 )
 install(FILES "${CMAKE_BINARY_DIR}/cmake/fluxins.pc" DESTINATION "lib/pkgconfig")
-
-if(BUILD_PACKAGE)
-    set(CPACK_PACKAGE_NAME "Fluxins")
-    set(CPACK_PACKAGE_VERSION 0.0.1)
-    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Fluxins is an Expression Parser")
-    set(CPACK_PACKAGE_CONTACT "__author__ <__email__>")
-    set(CPACK_GENERATOR "TGZ;DEB;RPM")
-    include(CPack)
-endif()
 
 add_executable(fluxins_executable
     main.cpp
