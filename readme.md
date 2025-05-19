@@ -1,7 +1,6 @@
 # Fluxins Expression Parser/Evaluator
 [![C++](https://img.shields.io/badge/C++-23-blue.svg)](https://en.cppreference.com/w/cpp)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](license.md)
-![Build](https://github.com/anstropleuton/fluxins/actions/workflows/ci.yml/badge.svg)
 
 **Fluxins** is a lightweight expression parser and evaluator written in modern C++. It has **no dependencies\*, simple integration, and is highly customizable**.
 
