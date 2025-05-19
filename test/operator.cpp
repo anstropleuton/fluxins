@@ -47,6 +47,9 @@ TEST_CASE("All operators functional evaluation")
     auto cfg = std::make_shared<fluxins::config>();
 
     // Binary operators
+
+    // NOTE: BE SURE TO MODIFY readme.md FILE WHEN ADDING NEW OPERATORS OR
+    // MODIFYING EXISTING ONES.
     CHECK(fluxins::express("1 + 2", cfg) == 3.0f);
     CHECK(fluxins::express("5 - 3", cfg) == 2.0f);
     CHECK(fluxins::express("4 * 2", cfg) == 8.0f);

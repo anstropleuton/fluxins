@@ -83,6 +83,9 @@ static float wrapping_modulo(float x, float y)
 void fluxins::context::populate()
 {
     // clang-format off
+
+    // NOTE: BE SURE TO MODIFY TEST FILES WHEN REGISTERING NEW VARIABLES OR
+    // MODIFYING EXISTING ONES.
     REGISTER_VARIABLE("e",              std::numbers::e);
     REGISTER_VARIABLE("log2e",          std::numbers::log2e);
     REGISTER_VARIABLE("log10e",         std::numbers::log10e);
@@ -103,6 +106,9 @@ void fluxins::context::populate()
 
     // Commented-out functions are part of C++26 standard proposal. They are not
     // yet available for use.
+
+    // NOTE: BE SURE TO MODIFY TEST FILES WHEN REGISTERING NEW FUNCTIONS OR
+    // CHANGING EXISTING ONES.
     REGISTER_FUNCTION("abs",            1, return std::abs(params[0]););
     REGISTER_FUNCTION("acos",           1, return std::acos(params[0]););
     REGISTER_FUNCTION("acosh",          1, return std::acosh(params[0]););
@@ -189,6 +195,9 @@ void fluxins::context::populate()
 fluxins::config::config()
 {
     // clang-format off
+
+    // NOTE: BE SURE TO MODIFY TEST FILES AND readme.md FILE WHEN ADDING
+    // NEW OPERATORS OR MODIFYING EXISTING ONES.
     unary_prefix_operators = {
         unary_operator{ "+", [](FLUXINS_UOP_PARAMS) -> float { return 0.0f + x; } },
         unary_operator{ "-", [](FLUXINS_UOP_PARAMS) -> float { return 0.0f - x; } },
