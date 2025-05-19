@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <print>
+#include <string>
 
 #include "fluxins/fluxins.hpp"
 

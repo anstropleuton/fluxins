@@ -7,8 +7,12 @@
 ///
 /// This project is licensed under the terms of MIT License.
 
+#include <cstddef>
+#include <memory>
 #include <vector>
 
+#include "fluxins/code.hpp"
+#include "fluxins/config.hpp"
 #include "fluxins/context.hpp"
 #include "fluxins/error.hpp"
 #include "fluxins/parser.hpp"

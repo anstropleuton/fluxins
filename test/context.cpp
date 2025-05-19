@@ -7,13 +7,14 @@
 ///
 /// This project is licensed under the terms of MIT License.
 
-#include "test.hpp"
-
-//
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include <memory>
 
-#include "fluxins/fluxins.hpp"
+#include "doctest/doctest.h"
+#include "fluxins/config.hpp"
+#include "fluxins/context.hpp"
+#include "fluxins/expression.hpp"
 
 TEST_CASE("Basic context")
 {

@@ -7,6 +7,12 @@
 ///
 /// This project is licensed under the terms of MIT License.
 
+#include <format>
+#include <string>
+#include <string_view>
+#include <vector>
+
+#include "fluxins/code.hpp"
 #include "fluxins/config.hpp"
 #include "fluxins/parser.hpp"
 

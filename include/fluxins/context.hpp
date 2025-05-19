@@ -15,6 +15,7 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "fluxins/code.hpp"
 #include "fluxins/error.hpp"

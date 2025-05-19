@@ -7,29 +7,30 @@
 ///
 /// This project is licensed under the terms of MIT License.
 
-#include "test.hpp"
-
-//
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include <memory>
 
-#include "fluxins/fluxins.hpp"
+#include "doctest/doctest.h"
+#include "fluxins/config.hpp"
+#include "fluxins/context.hpp"
+#include "fluxins/expression.hpp"
 
 TEST_CASE("Basic expression parsing and evaluation")
 {
     auto cfg = std::make_shared<fluxins::config>();
 
-    CHECK(express("1 + 1", cfg) == 2.0f);
-    CHECK(express("2 * (3 + 4)", cfg) == 14.0f);
-    CHECK(express("2 ** 3 + 1", cfg) == 9.0f);
-    CHECK(express("10 // 3 + 2 % 3", cfg) == 5.0f);
-    CHECK(express("-2 %% 5 + 4", cfg) == 7.0f);
-    CHECK(express("5 !! 3 + (4 <? 2)", cfg) == 4.0f);
-    CHECK(express("8 >? 3 - 1", cfg) == 7.0f);
-    CHECK(express("0 ?? 5 * 2", cfg) == 10.0);
-    CHECK(express("1 ? 10 : 20 + 5", cfg) == 10.0f);
-    CHECK(express("(1 ? 2 : 3) * (4 - 1)", cfg) == 6.0f);
-    CHECK(express("(1 + 2) * 3 - 4 / 5 + 2 ** (1 + 1)", cfg) == 12.2f);
+    CHECK(fluxins::express("1 + 1", cfg) == 2.0f);
+    CHECK(fluxins::express("2 * (3 + 4)", cfg) == 14.0f);
+    CHECK(fluxins::express("2 ** 3 + 1", cfg) == 9.0f);
+    CHECK(fluxins::express("10 // 3 + 2 % 3", cfg) == 5.0f);
+    CHECK(fluxins::express("-2 %% 5 + 4", cfg) == 7.0f);
+    CHECK(fluxins::express("5 !! 3 + (4 <? 2)", cfg) == 4.0f);
+    CHECK(fluxins::express("8 >? 3 - 1", cfg) == 7.0f);
+    CHECK(fluxins::express("0 ?? 5 * 2", cfg) == 10.0);
+    CHECK(fluxins::express("1 ? 10 : 20 + 5", cfg) == 10.0f);
+    CHECK(fluxins::express("(1 ? 2 : 3) * (4 - 1)", cfg) == 6.0f);
+    CHECK(fluxins::express("(1 + 2) * 3 - 4 / 5 + 2 ** (1 + 1)", cfg) == 12.2f);
 }
 
 TEST_CASE("Basic expression with context")
@@ -72,16 +73,16 @@ TEST_CASE("Basic expression with shared context")
     ctx4->set_variable("p", 3);
     ctx4->set_function("square", [](FLUXINS_FN_PARAMS) { return params[0] * params[0]; });
 
-    CHECK(express("a + b + c", cfg, ctx1) == 6.0f);
-    CHECK(express("a * b - c", cfg, ctx1) == -1.0f);
-    CHECK(express("(a + b) * c", cfg, ctx1) == 9.0f);
-    CHECK(express("inc(5)", cfg, ctx2) == 6.0f);
-    CHECK(express("square(3)", cfg, ctx2) == 9.0f);
-    CHECK(express("inc(square(2))", cfg, ctx2) == 5.0f);
-    CHECK(express("double(x)", cfg, ctx3) == 10.0f);
-    CHECK(express("x + double(y)", cfg, ctx3) == 25.0f);
-    CHECK(express("double(x + y)", cfg, ctx3) == 30.0f);
-    CHECK(express("square(p)", cfg, ctx4) == 9.0f);
-    CHECK(express("p + square(p)", cfg, ctx4) == 12.0f);
-    CHECK(express("square(p + 2)", cfg, ctx4) == 25.0f);
+    CHECK(fluxins::express("a + b + c", cfg, ctx1) == 6.0f);
+    CHECK(fluxins::express("a * b - c", cfg, ctx1) == -1.0f);
+    CHECK(fluxins::express("(a + b) * c", cfg, ctx1) == 9.0f);
+    CHECK(fluxins::express("inc(5)", cfg, ctx2) == 6.0f);
+    CHECK(fluxins::express("square(3)", cfg, ctx2) == 9.0f);
+    CHECK(fluxins::express("inc(square(2))", cfg, ctx2) == 5.0f);
+    CHECK(fluxins::express("double(x)", cfg, ctx3) == 10.0f);
+    CHECK(fluxins::express("x + double(y)", cfg, ctx3) == 25.0f);
+    CHECK(fluxins::express("double(x + y)", cfg, ctx3) == 30.0f);
+    CHECK(fluxins::express("square(p)", cfg, ctx4) == 9.0f);
+    CHECK(fluxins::express("p + square(p)", cfg, ctx4) == 12.0f);
+    CHECK(fluxins::express("square(p + 2)", cfg, ctx4) == 25.0f);
 }

@@ -7,15 +7,14 @@
 ///
 /// This project is licensed under the terms of MIT License.
 
-#include "fluxins/config.hpp"
-#include "test.hpp"
-
-//
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include <memory>
 #include <stdexcept>
 
-#include "fluxins/fluxins.hpp"
+#include "doctest/doctest.h"
+#include "fluxins/config.hpp"
+#include "fluxins/expression.hpp"
 
 TEST_CASE("Initial configuration state")
 {
@@ -223,7 +222,7 @@ TEST_CASE("Custom unary prefix operator")
     CHECK(cfg->get_unary_prefix_op("++").operate({}, {}, 2.0f) == 3.0f);
 
     // Test the operator
-    CHECK(express("++2", cfg) == 3.0f);
+    CHECK(fluxins::express("++2", cfg) == 3.0f);
 
     // Delete the custom operator
     cfg->remove_unary_prefix_op("++");
@@ -252,7 +251,7 @@ TEST_CASE("Custom unary suffix operator")
     CHECK(cfg->get_unary_suffix_op("--").operate({}, {}, 2.0f) == 1.0f);
 
     // Test the operator
-    CHECK(express("2--", cfg) == 1.0f);
+    CHECK(fluxins::express("2--", cfg) == 1.0f);
 
     // Delete the custom operator
     cfg->remove_unary_suffix_op("--");
@@ -365,13 +364,13 @@ TEST_CASE("Custom binary operator")
     CHECK(cfg->get_precedence("||") == precedence);
 
     // Test the operator
-    CHECK(express("2+++3", cfg) == 12.0f); // 2 * 3 + 2 * 3 = 12
-    
+    CHECK(fluxins::express("2+++3", cfg) == 12.0f); // 2 * 3 + 2 * 3 = 12
+
     // Test the operator precedence with other operator
-    CHECK(express("2+++3*4", cfg) == 48.0f); // 12 * 4 = 48, since +++ is more precedent than *
+    CHECK(fluxins::express("2+++3*4", cfg) == 48.0f); // 12 * 4 = 48, since +++ is more precedent than *
 
     // Test the associativity of the operator
-    CHECK(express("2+++3+++4", cfg) == 96.0f); // 2+++(3+++4), we get 96, since +++ is right associative
+    CHECK(fluxins::express("2+++3+++4", cfg) == 96.0f); // 2+++(3+++4), we get 96, since +++ is right associative
 
     // Delete the custom operator
     cfg->unassign_precedence("+++");

@@ -104,26 +104,25 @@
 ///
 /// This project is licensed under the terms of MIT License.
 
-#include <cctype>
+#include <algorithm>
 #include <cstddef>
+#include <cstdlib>
+#include <exception>
 #include <fstream>
+#include <functional>
 #include <iostream>
+#include <iterator>
 #include <memory>
-#include <ostream>
 #include <print>
 #include <ranges>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
-#include "fluxins/config.hpp"
-#include "fluxins/context.hpp"
-#include "fluxins/error.hpp"
 #include "fluxins/fluxins.hpp"
-#include "fluxins/parser.hpp"
 
-using namespace std::string_literals;
 using namespace fluxins;
 
 // clang-format off
@@ -131,36 +130,27 @@ using namespace fluxins;
 // ===
 // ANSI escape codes
 
-#define RESET           "\x1b[0m"s
-#define BOLD            "\x1b[1m"s
-#define UNDERLINE       "\x1b[4m"s
+#define RESET           "\x1b[0m"
+#define BOLD            "\x1b[1m"
+#define UNDERLINE       "\x1b[4m"
 
-#define BLACK           "\x1b[30m"s
-#define RED             "\x1b[31m"s
-#define GREEN           "\x1b[32m"s
-#define YELLOW          "\x1b[33m"s
-#define BLUE            "\x1b[34m"s
-#define MAGENTA         "\x1b[35m"s
-#define CYAN            "\x1b[36m"s
-#define WHITE           "\x1b[37m"s
+#define BLACK           "\x1b[30m"
+#define RED             "\x1b[31m"
+#define GREEN           "\x1b[32m"
+#define YELLOW          "\x1b[33m"
+#define BLUE            "\x1b[34m"
+#define MAGENTA         "\x1b[35m"
+#define CYAN            "\x1b[36m"
+#define WHITE           "\x1b[37m"
 
-#define BRIGHT_BLACK    "\x1b[90m"s
-#define BRIGHT_RED      "\x1b[91m"s
-#define BRIGHT_GREEN    "\x1b[92m"s
-#define BRIGHT_YELLOW   "\x1b[93m"s
-#define BRIGHT_BLUE     "\x1b[94m"s
-#define BRIGHT_MAGENTA  "\x1b[95m"s
-#define BRIGHT_CYAN     "\x1b[96m"s
-#define BRIGHT_WHITE    "\x1b[97m"s
-
-#define KEY_SHIFT_UP_ARROW
-#define KEY_SHIFT_DOWN_ARROW
-#define KEY_SHIFT_LEFT_ARROW
-#define KEY_SHIFT_RIGHT_ARROW
-#define KEY_CTRL_UP_ARROW
-#define KEY_CTRL_DOWN_ARROW
-#define KEY_CTRL_LEFT_ARROW
-#define KEY_CTRL_RIGHT_ARROW
+#define BRIGHT_BLACK    "\x1b[90m"
+#define BRIGHT_RED      "\x1b[91m"
+#define BRIGHT_GREEN    "\x1b[92m"
+#define BRIGHT_YELLOW   "\x1b[93m"
+#define BRIGHT_BLUE     "\x1b[94m"
+#define BRIGHT_MAGENTA  "\x1b[95m"
+#define BRIGHT_CYAN     "\x1b[96m"
+#define BRIGHT_WHITE    "\x1b[97m"
 
 // ===
 // Configure the REPL
@@ -174,7 +164,7 @@ using namespace fluxins;
 
 #define COMMAND_PARAMS std::string_view expr, const std::vector<token> &args
 #define REPL_FN_PARAMS const repl_function &this_fn, std::string_view expr, code_location location, const std::vector<float> &values
-#define CTRL_KEY(x) ((x) & 0x1f)
+#define CTRL_KEY(x)    ((x) & 0x1f)
 
 // clang-format on
 
@@ -193,6 +183,8 @@ bool colorization = true; // Enable syntax highlighting by default
 /// Evaluate an expression from tokens.
 /// @note It takes expression code only for displaying errors. It does not
 ///       process the expression code, and only processes the given tokens.
+/// @note We are not using the new `fluxins::express` feature added in v1.0.1
+///       because we are working with tokens, not a string inherently.
 float eval(const code &expr, const std::vector<token> &tokens, std::shared_ptr<context> ctx = std::make_shared<context>())
 {
     // Manually parse and evaluate tokens using Fluxins' parser and evaluator.
@@ -652,7 +644,7 @@ std::string parse_command(std::string_view input)
         }
         catch (const std::exception &e)
         {
-            command_output = "$r"s + e.what() + "$0";
+            command_output = std::string("$r") + e.what() + "$0";
         }
 
         output += command_output;

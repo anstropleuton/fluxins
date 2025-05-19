@@ -8,62 +8,88 @@
 ///
 /// This project is licensed under the terms of MIT License.
 
-#include "test.hpp"
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-//
-
+#include <cmath>
+#include <format>
 #include <memory>
+#include <string>
 
-#include "fluxins/fluxins.hpp"
+#include "doctest/doctest.h"
+#include "fluxins/config.hpp"
+#include "fluxins/context.hpp"
+#include "fluxins/error.hpp"
+#include "fluxins/expression.hpp"
+
+#define CHECK_EXPR(expected_expr, check_expr)                 \
+    do                                                        \
+    {                                                         \
+        CAPTURE(expected_expr);                               \
+        CAPTURE(check_expr);                                  \
+        float expected = 0.0f;                                \
+        try                                                   \
+        {                                                     \
+            expected = express(expected_expr, cfg);           \
+        }                                                     \
+        catch (const fluxins::code_error &e)                  \
+        {                                                     \
+            MESSAGE("Fluxins error: ", e.what());             \
+            continue;                                         \
+        }                                                     \
+        if (std::isnan(expected) || std::isinf(expected))     \
+            continue;                                         \
+        CHECK(fluxins::express(check_expr, cfg) == expected); \
+    }                                                         \
+    while (0)
 
 TEST_CASE("All operators functional evaluation")
 {
     auto cfg = std::make_shared<fluxins::config>();
 
     // Binary operators
-    CHECK(express("1 + 2", cfg) == 3.0f);
-    CHECK(express("5 - 3", cfg) == 2.0f);
-    CHECK(express("4 * 2", cfg) == 8.0f);
-    CHECK(express("8 / 2", cfg) == 4.0f);
-    CHECK(express("7 % 4", cfg) == 3.0f);
-    CHECK(express("-2 %% 5", cfg) == 3.0f);
-    CHECK(express("2 ** 3", cfg) == 8.0f);
-    CHECK(express("7 // 2", cfg) == 3.0f);
-    CHECK(express("2 == 2", cfg) == 1.0f);
-    CHECK(express("2 != 2", cfg) == 0.0f);
-    CHECK(express("2 < 3", cfg) == 1.0f);
-    CHECK(express("3 > 2", cfg) == 1.0f);
-    CHECK(express("2 <= 2", cfg) == 1.0f);
-    CHECK(express("2 >= 3", cfg) == 0.0f);
-    CHECK(express("1 && 0", cfg) == 0.0f);
-    CHECK(express("1 || 0", cfg) == 1.0f);
-    CHECK(express("3 & 1", cfg) == 1.0f);
-    CHECK(express("2 | 1", cfg) == 3.0f);
-    CHECK(express("2 ^ 3", cfg) == 1.0f);
-    CHECK(express("1 << 2", cfg) == 4.0f);
-    CHECK(express("4 >> 1", cfg) == 2.0f);
-    CHECK(express("3 !! 5", cfg) == 2.0f);
-    CHECK(express("0 ?? 5", cfg) == 5.0f);
-    CHECK(express("4 ?? 5", cfg) == 4.0f);
-    CHECK(express("3 <? 5", cfg) == 3.0f);
-    CHECK(express("3 >? 5", cfg) == 5.0f);
+    CHECK(fluxins::express("1 + 2", cfg) == 3.0f);
+    CHECK(fluxins::express("5 - 3", cfg) == 2.0f);
+    CHECK(fluxins::express("4 * 2", cfg) == 8.0f);
+    CHECK(fluxins::express("8 / 2", cfg) == 4.0f);
+    CHECK(fluxins::express("7 % 4", cfg) == 3.0f);
+    CHECK(fluxins::express("-2 %% 5", cfg) == 3.0f);
+    CHECK(fluxins::express("2 ** 3", cfg) == 8.0f);
+    CHECK(fluxins::express("7 // 2", cfg) == 3.0f);
+    CHECK(fluxins::express("2 == 2", cfg) == 1.0f);
+    CHECK(fluxins::express("2 != 2", cfg) == 0.0f);
+    CHECK(fluxins::express("2 < 3", cfg) == 1.0f);
+    CHECK(fluxins::express("3 > 2", cfg) == 1.0f);
+    CHECK(fluxins::express("2 <= 2", cfg) == 1.0f);
+    CHECK(fluxins::express("2 >= 3", cfg) == 0.0f);
+    CHECK(fluxins::express("1 && 0", cfg) == 0.0f);
+    CHECK(fluxins::express("1 || 0", cfg) == 1.0f);
+    CHECK(fluxins::express("3 & 1", cfg) == 1.0f);
+    CHECK(fluxins::express("2 | 1", cfg) == 3.0f);
+    CHECK(fluxins::express("2 ^ 3", cfg) == 1.0f);
+    CHECK(fluxins::express("1 << 2", cfg) == 4.0f);
+    CHECK(fluxins::express("4 >> 1", cfg) == 2.0f);
+    CHECK(fluxins::express("3 !! 5", cfg) == 2.0f);
+    CHECK(fluxins::express("0 ?? 5", cfg) == 5.0f);
+    CHECK(fluxins::express("4 ?? 5", cfg) == 4.0f);
+    CHECK(fluxins::express("3 <? 5", cfg) == 3.0f);
+    CHECK(fluxins::express("3 >? 5", cfg) == 5.0f);
 
     // Prefix unary operators
-    CHECK(express("+5", cfg) == 5.0f);
-    CHECK(express("-5", cfg) == -5.0f);
-    CHECK(express("*5", cfg) == 5.0f);
-    CHECK(express("/5", cfg) == 0.2f);
-    CHECK(express("!0", cfg) == 1.0f);
-    CHECK(express("!1", cfg) == 0.0f);
-    CHECK(express("~1", cfg) == ~1);
+    CHECK(fluxins::express("+5", cfg) == 5.0f);
+    CHECK(fluxins::express("-5", cfg) == -5.0f);
+    CHECK(fluxins::express("*5", cfg) == 5.0f);
+    CHECK(fluxins::express("/5", cfg) == 0.2f);
+    CHECK(fluxins::express("!0", cfg) == 1.0f);
+    CHECK(fluxins::express("!1", cfg) == 0.0f);
+    CHECK(fluxins::express("~1", cfg) == ~1);
 
     // Suffix unary operator
-    CHECK(express("4!", cfg) == 24.0f);
-    CHECK(express("5!", cfg) == 120.0f);
+    CHECK(fluxins::express("4!", cfg) == 24.0f);
+    CHECK(fluxins::express("5!", cfg) == 120.0f);
 
     // Conditional (ternary) operator
-    CHECK(express("1 ? 2 : 3", cfg) == 2.0f);
-    CHECK(express("0 ? 2 : 3", cfg) == 3.0f);
+    CHECK(fluxins::express("1 ? 2 : 3", cfg) == 2.0f);
+    CHECK(fluxins::express("0 ? 2 : 3", cfg) == 3.0f);
 }
 
 TEST_CASE("All operator precedence with all other operators")
@@ -71,7 +97,7 @@ TEST_CASE("All operator precedence with all other operators")
     auto cfg = std::make_shared<fluxins::config>();
 
     // Assumption: parenthesis works
-    REQUIRE(express("1 + (2 * 3)", cfg) == 7.0f);
+    REQUIRE(fluxins::express("1 + (2 * 3)", cfg) == 7.0f);
 
     float a = 1, b = 2, c = 3, d = 4;
 
@@ -118,14 +144,16 @@ TEST_CASE("All operator associativity")
     auto cfg = std::make_shared<fluxins::config>();
 
     // Assumption: parenthesis works
-    REQUIRE(express("1 * (2 * 3)", cfg) == 6.0f);
-    REQUIRE(express("(1 * 2) * 3", cfg) == 6.0f);
+    REQUIRE(fluxins::express("1 * (2 * 3)", cfg) == 6.0f);
+    REQUIRE(fluxins::express("(1 * 2) * 3", cfg) == 6.0f);
 
     float a = 1, b = 2, c = 3;
 
     for (const auto &op : cfg->binary_operators)
     {
-        SUBCASE(std::format("Associativity: {} ({})", op.symbol, op.assoc == fluxins::associativity::left ? "left" : op.assoc == fluxins::associativity::right ? "right" : "unknown").c_str())
+        SUBCASE(std::format("Associativity: {} ({})", op.symbol, op.assoc == fluxins::associativity::left ? "left" : op.assoc == fluxins::associativity::right ? "right"
+                                                                                                                                                               : "unknown")
+                    .c_str())
         {
             // Left associativity: a op b op c == (a op b) op c
             if (op.assoc == fluxins::associativity::left)
@@ -154,52 +182,53 @@ TEST_CASE("Nested ternary operator")
 
     // Assumption: parenthesis works
     auto ctx = std::make_shared<fluxins::context>();
+
     ctx->variables["a"] = 1.0f;
     ctx->variables["b"] = 2.0f;
     ctx->variables["c"] = 3.0f;
     ctx->variables["d"] = 4.0f;
 
     // Nested at left side
-    REQUIRE(express("0 ? (0 ? a : b) : c", cfg, ctx) == 3.0f);
-    REQUIRE(express("1 ? (0 ? a : b) : c", cfg, ctx) == 2.0f);
-    REQUIRE(express("0 ? (1 ? a : b) : c", cfg, ctx) == 3.0f);
-    REQUIRE(express("1 ? (1 ? a : b) : c", cfg, ctx) == 1.0f);
+    REQUIRE(fluxins::express("0 ? (0 ? a : b) : c", cfg, ctx) == 3.0f);
+    REQUIRE(fluxins::express("1 ? (0 ? a : b) : c", cfg, ctx) == 2.0f);
+    REQUIRE(fluxins::express("0 ? (1 ? a : b) : c", cfg, ctx) == 3.0f);
+    REQUIRE(fluxins::express("1 ? (1 ? a : b) : c", cfg, ctx) == 1.0f);
 
     // Nested at right side
-    REQUIRE(express("0 ? a : (0 ? b : c)", cfg, ctx) == 3.0f);
-    REQUIRE(express("1 ? a : (0 ? b : c)", cfg, ctx) == 1.0f);
-    REQUIRE(express("0 ? a : (1 ? b : c)", cfg, ctx) == 2.0f);
-    REQUIRE(express("1 ? a : (1 ? b : c)", cfg, ctx) == 1.0f);
+    REQUIRE(fluxins::express("0 ? a : (0 ? b : c)", cfg, ctx) == 3.0f);
+    REQUIRE(fluxins::express("1 ? a : (0 ? b : c)", cfg, ctx) == 1.0f);
+    REQUIRE(fluxins::express("0 ? a : (1 ? b : c)", cfg, ctx) == 2.0f);
+    REQUIRE(fluxins::express("1 ? a : (1 ? b : c)", cfg, ctx) == 1.0f);
 
     // Nested at both sides
-    REQUIRE(express("0 ? (0 ? a : b) : (0 ? c : d)", cfg, ctx) == 4.0f);
-    REQUIRE(express("1 ? (0 ? a : b) : (0 ? c : d)", cfg, ctx) == 2.0f);
-    REQUIRE(express("0 ? (1 ? a : b) : (0 ? c : d)", cfg, ctx) == 4.0f);
-    REQUIRE(express("1 ? (1 ? a : b) : (0 ? c : d)", cfg, ctx) == 1.0f);
-    REQUIRE(express("0 ? (0 ? a : b) : (1 ? c : d)", cfg, ctx) == 3.0f);
-    REQUIRE(express("1 ? (0 ? a : b) : (1 ? c : d)", cfg, ctx) == 2.0f);
-    REQUIRE(express("0 ? (1 ? a : b) : (1 ? c : d)", cfg, ctx) == 3.0f);
-    REQUIRE(express("1 ? (1 ? a : b) : (1 ? c : d)", cfg, ctx) == 1.0f);
+    REQUIRE(fluxins::express("0 ? (0 ? a : b) : (0 ? c : d)", cfg, ctx) == 4.0f);
+    REQUIRE(fluxins::express("1 ? (0 ? a : b) : (0 ? c : d)", cfg, ctx) == 2.0f);
+    REQUIRE(fluxins::express("0 ? (1 ? a : b) : (0 ? c : d)", cfg, ctx) == 4.0f);
+    REQUIRE(fluxins::express("1 ? (1 ? a : b) : (0 ? c : d)", cfg, ctx) == 1.0f);
+    REQUIRE(fluxins::express("0 ? (0 ? a : b) : (1 ? c : d)", cfg, ctx) == 3.0f);
+    REQUIRE(fluxins::express("1 ? (0 ? a : b) : (1 ? c : d)", cfg, ctx) == 2.0f);
+    REQUIRE(fluxins::express("0 ? (1 ? a : b) : (1 ? c : d)", cfg, ctx) == 3.0f);
+    REQUIRE(fluxins::express("1 ? (1 ? a : b) : (1 ? c : d)", cfg, ctx) == 1.0f);
 
     // Test nested ternary operator nested at left side
-    CHECK(express("0 ? 0 ? a : b : c", cfg, ctx) == 3.0f);
-    CHECK(express("1 ? 0 ? a : b : c", cfg, ctx) == 2.0f);
-    CHECK(express("0 ? 1 ? a : b : c", cfg, ctx) == 3.0f);
-    CHECK(express("1 ? 1 ? a : b : c", cfg, ctx) == 1.0f);
+    CHECK(fluxins::express("0 ? 0 ? a : b : c", cfg, ctx) == 3.0f);
+    CHECK(fluxins::express("1 ? 0 ? a : b : c", cfg, ctx) == 2.0f);
+    CHECK(fluxins::express("0 ? 1 ? a : b : c", cfg, ctx) == 3.0f);
+    CHECK(fluxins::express("1 ? 1 ? a : b : c", cfg, ctx) == 1.0f);
 
     // Test nested ternary operator nested at right side
-    CHECK(express("0 ? a : 0 ? b : c", cfg, ctx) == 3.0f);
-    CHECK(express("1 ? a : 0 ? b : c", cfg, ctx) == 1.0f);
-    CHECK(express("0 ? a : 1 ? b : c", cfg, ctx) == 2.0f);
-    CHECK(express("1 ? a : 1 ? b : c", cfg, ctx) == 1.0f);
+    CHECK(fluxins::express("0 ? a : 0 ? b : c", cfg, ctx) == 3.0f);
+    CHECK(fluxins::express("1 ? a : 0 ? b : c", cfg, ctx) == 1.0f);
+    CHECK(fluxins::express("0 ? a : 1 ? b : c", cfg, ctx) == 2.0f);
+    CHECK(fluxins::express("1 ? a : 1 ? b : c", cfg, ctx) == 1.0f);
 
     // Test nested ternary operator nested at both sides
-    CHECK(express("0 ? 0 ? a : b : 0 ? c : d", cfg, ctx) == 4.0f);
-    CHECK(express("1 ? 0 ? a : b : 0 ? c : d", cfg, ctx) == 2.0f);
-    CHECK(express("0 ? 1 ? a : b : 0 ? c : d", cfg, ctx) == 4.0f);
-    CHECK(express("1 ? 1 ? a : b : 0 ? c : d", cfg, ctx) == 1.0f);
-    CHECK(express("0 ? 0 ? a : b : 1 ? c : d", cfg, ctx) == 3.0f);
-    CHECK(express("1 ? 0 ? a : b : 1 ? c : d", cfg, ctx) == 2.0f);
-    CHECK(express("0 ? 1 ? a : b : 1 ? c : d", cfg, ctx) == 3.0f);
-    CHECK(express("1 ? 1 ? a : b : 1 ? c : d", cfg, ctx) == 1.0f);
+    CHECK(fluxins::express("0 ? 0 ? a : b : 0 ? c : d", cfg, ctx) == 4.0f);
+    CHECK(fluxins::express("1 ? 0 ? a : b : 0 ? c : d", cfg, ctx) == 2.0f);
+    CHECK(fluxins::express("0 ? 1 ? a : b : 0 ? c : d", cfg, ctx) == 4.0f);
+    CHECK(fluxins::express("1 ? 1 ? a : b : 0 ? c : d", cfg, ctx) == 1.0f);
+    CHECK(fluxins::express("0 ? 0 ? a : b : 1 ? c : d", cfg, ctx) == 3.0f);
+    CHECK(fluxins::express("1 ? 0 ? a : b : 1 ? c : d", cfg, ctx) == 2.0f);
+    CHECK(fluxins::express("0 ? 1 ? a : b : 1 ? c : d", cfg, ctx) == 3.0f);
+    CHECK(fluxins::express("1 ? 1 ? a : b : 1 ? c : d", cfg, ctx) == 1.0f);
 }

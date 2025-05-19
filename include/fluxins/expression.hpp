@@ -12,6 +12,7 @@
 
 #include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "fluxins/code.hpp"
@@ -143,5 +144,11 @@ struct expression {
         return *this;
     }
 };
+
+/// Evaluate an expression with the given configuration and context.
+inline float express(std::string_view expr, std::shared_ptr<fluxins::config> cfg = nullptr, std::shared_ptr<fluxins::context> ctx = nullptr)
+{
+    return fluxins::expression(expr, cfg, ctx).get_value();
+}
 
 } // namespace fluxins

@@ -7,14 +7,18 @@
 ///
 /// This project is licensed under the terms of MIT License.
 
-#include "fluxins/parser.hpp"
-
+#include <algorithm>
+#include <cctype>
+#include <cstddef>
+#include <iterator>
 #include <memory>
+#include <string>
 #include <vector>
 
+#include "fluxins/code.hpp"
 #include "fluxins/config.hpp"
 #include "fluxins/error.hpp"
-#include "fluxins/fluxins.hpp"
+#include "fluxins/parser.hpp"
 
 std::vector<fluxins::token> fluxins::tokenize(const code &expr)
 {

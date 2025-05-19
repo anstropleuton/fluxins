@@ -9,25 +9,26 @@ UseTab: Never
 # Allman for code and K&R for declaration
 BreakBeforeBraces: Custom
 BraceWrapping:
-    AfterFunction: true
-    AfterControlStatement: true
-    AfterEnum: false
-    AfterStruct: false
-    AfterClass: false
-    AfterNamespace: false
-    BeforeElse: true
-    BeforeCatch: true
-    BeforeWhile: true
-    BeforeLambdaBody: false
-    SplitEmptyFunction: false
-    SplitEmptyRecord: false
-    SplitEmptyNamespace: false
+  AfterFunction: true
+  AfterControlStatement: true
+  AfterEnum: false
+  AfterStruct: false
+  AfterClass: false
+  AfterNamespace: false
+  BeforeElse: true
+  BeforeCatch: true
+  BeforeWhile: true
+  BeforeLambdaBody: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
 
 ColumnLimit: 0
 
 # Keep includes tidy
 IncludeBlocks: Regroup
 SortIncludes: true
+IncludeIsMainRegex: '^$'
 
 # Alignments and spaces
 AlignConsecutiveAssignments: true

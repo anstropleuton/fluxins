@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(fluxins
     DESCRIPTION "Fluxins is a lightweight expression parser and evaluator written in modern C++."
-    VERSION 1.0.0
+    VERSION 1.0.1
     LANGUAGES CXX)
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
@@ -20,7 +20,8 @@ endif()
 
 find_program(IWYU_PATH NAMES include-what-you-use iwyu)
 if(IWYU_PATH)
-  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_PATH}")
+    set(IWYU_MAPPING "${CMAKE_SOURCE_DIR}/.iwyu.imp")
+    set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_PATH};-Xiwyu;--mapping_file=${IWYU_MAPPING}")
 endif()
 
 add_subdirectory(source)

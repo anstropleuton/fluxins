@@ -85,6 +85,18 @@ int main()
 }
 ```
 
+Or check out this micro-example if you want ultra-quick expression parsing.
+
+```cpp
+#include "fluxins/fluxins.hpp"
+
+int main()
+{
+    float value = fluxins::express("1 + 1"); // Since v1.0.1
+    std::println("Result of 1 + 1: {}", value);
+}
+```
+
 For other usage examples, including customizing functions or operators, see [example](example) directory.
 
 # Features

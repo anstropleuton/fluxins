@@ -8,16 +8,15 @@
 ///
 /// This project is licensed under the terms of MIT License.
 
-#include "fluxins/error.hpp"
-
-#include "fluxins/expression.hpp"
-#include "test.hpp"
-
-//
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include <memory>
 
-#include "fluxins/fluxins.hpp"
+#include "doctest/doctest.h"
+#include "fluxins/config.hpp"
+#include "fluxins/context.hpp"
+#include "fluxins/error.hpp"
+#include "fluxins/expression.hpp"
 
 TEST_CASE("Invalid arity")
 {
@@ -29,8 +28,8 @@ TEST_CASE("Invalid arity")
         return params[0] + params[1];
     });
 
-    CHECK_THROWS_AS(express("add(1)", cfg, ctx), fluxins::invalid_arity);
-    CHECK_THROWS_AS(express("add(1, 2, 3)", cfg, ctx), fluxins::invalid_arity);
+    CHECK_THROWS_AS(fluxins::express("add(1)", cfg, ctx), fluxins::invalid_arity);
+    CHECK_THROWS_AS(fluxins::express("add(1, 2, 3)", cfg, ctx), fluxins::invalid_arity);
 }
 
 TEST_CASE("Tokenizer error")
@@ -38,9 +37,9 @@ TEST_CASE("Tokenizer error")
     auto cfg = std::make_shared<fluxins::config>();
     auto ctx = std::make_shared<fluxins::context>();
 
-    CHECK_THROWS_AS(express("#", cfg, ctx), fluxins::tokenizer_error);
-    CHECK_THROWS_AS(express("1'23'", cfg, ctx), fluxins::tokenizer_error);
-    CHECK_THROWS_AS(express("1.2.3", cfg, ctx), fluxins::tokenizer_error);
+    CHECK_THROWS_AS(fluxins::express("#", cfg, ctx), fluxins::tokenizer_error);
+    CHECK_THROWS_AS(fluxins::express("1'23'", cfg, ctx), fluxins::tokenizer_error);
+    CHECK_THROWS_AS(fluxins::express("1.2.3", cfg, ctx), fluxins::tokenizer_error);
 }
 
 TEST_CASE("Unexpected token")
@@ -53,10 +52,10 @@ TEST_CASE("Unexpected token")
         return params[0] + params[1];
     });
 
-    CHECK_THROWS_AS(express("3 + 4 5", cfg, ctx), fluxins::unexpected_token);
-    CHECK_THROWS_AS(express("add(6, 7 8)", cfg, ctx), fluxins::unexpected_token);
-    CHECK_THROWS_AS(express("(9 10)", cfg, ctx), fluxins::unexpected_token);
-    CHECK_THROWS_AS(express("11 ? 12 13", cfg, ctx), fluxins::unexpected_token);
+    CHECK_THROWS_AS(fluxins::express("3 + 4 5", cfg, ctx), fluxins::unexpected_token);
+    CHECK_THROWS_AS(fluxins::express("add(6, 7 8)", cfg, ctx), fluxins::unexpected_token);
+    CHECK_THROWS_AS(fluxins::express("(9 10)", cfg, ctx), fluxins::unexpected_token);
+    CHECK_THROWS_AS(fluxins::express("11 ? 12 13", cfg, ctx), fluxins::unexpected_token);
 }
 
 TEST_CASE("Unresolved reference to variable")
@@ -64,8 +63,8 @@ TEST_CASE("Unresolved reference to variable")
     auto cfg = std::make_shared<fluxins::config>();
     auto ctx = std::make_shared<fluxins::context>();
 
-    CHECK_THROWS_AS(express("x + 1", cfg, ctx), fluxins::unresolved_reference);
-    CHECK_THROWS_AS(express("function(x)", cfg, ctx), fluxins::unresolved_reference);
+    CHECK_THROWS_AS(fluxins::express("x + 1", cfg, ctx), fluxins::unresolved_reference);
+    CHECK_THROWS_AS(fluxins::express("function(x)", cfg, ctx), fluxins::unresolved_reference);
 }
 
 // Special case
@@ -79,10 +78,10 @@ TEST_CASE("Unexpected end of expression")
         return params[0] + params[1];
     });
 
-    CHECK_THROWS_AS(express("1 +", cfg, ctx), fluxins::unexpected_token);
-    CHECK_THROWS_AS(express("add(2, 3", cfg, ctx), fluxins::unexpected_token);
-    CHECK_THROWS_AS(express("(4 + 5", cfg, ctx), fluxins::unexpected_token);
-    CHECK_THROWS_AS(express("6 ? 7", cfg, ctx), fluxins::unexpected_token);
+    CHECK_THROWS_AS(fluxins::express("1 +", cfg, ctx), fluxins::unexpected_token);
+    CHECK_THROWS_AS(fluxins::express("add(2, 3", cfg, ctx), fluxins::unexpected_token);
+    CHECK_THROWS_AS(fluxins::express("(4 + 5", cfg, ctx), fluxins::unexpected_token);
+    CHECK_THROWS_AS(fluxins::express("6 ? 7", cfg, ctx), fluxins::unexpected_token);
 }
 
 // Special case
