@@ -3,7 +3,7 @@
 /// @authors   Anstro Pleuton <https://github.com/anstropleuton>
 /// @copyright Copyright (c) 2025 Anstro Pleuton
 ///
-/// This header file is the root header file for the Fluxins library.
+/// This header file is the root header file for the Fluxins.
 ///  _____ _            _
 /// |  ___| |_   ___  _(_)_ __  ___
 /// | |_  | | | | \ \/ / | '_ \/ __|

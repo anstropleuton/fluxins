@@ -317,7 +317,7 @@ struct token_stream {
         return tokens[pos];
     }
 
-    /// Get the next token and consume it.
+    /// Get the current token and consume it.
     token next()
     {
         expect_not_eof();
@@ -445,6 +445,7 @@ std::string binary_op_left_command_evaluator(COMMAND_PARAMS);   std::string bina
 std::string binary_op_right_command_evaluator(COMMAND_PARAMS);  std::string binary_op_right_command_docs(COMMAND_PARAMS);
 std::string info_command_evaluator(COMMAND_PARAMS);             std::string info_command_docs(COMMAND_PARAMS);
 std::string list_command_evaluator(COMMAND_PARAMS);             std::string list_command_docs(COMMAND_PARAMS);
+std::string undef_command_evaluator(COMMAND_PARAMS);            std::string undef_command_docs(COMMAND_PARAMS);
 std::string tokens_command_evaluator(COMMAND_PARAMS);           std::string tokens_command_docs(COMMAND_PARAMS);
 std::string ast_command_evaluator(COMMAND_PARAMS);              std::string ast_command_docs(COMMAND_PARAMS);
 std::string help_command_evaluator(COMMAND_PARAMS);             std::string help_command_docs(COMMAND_PARAMS);
@@ -461,6 +462,7 @@ std::unordered_map<std::string, command> commands = {
     { "binary_op_right", command{ binary_op_right_command_evaluator,   binary_op_right_command_docs } },
     { "info",            command{ info_command_evaluator,              info_command_docs }            },
     { "list",            command{ list_command_evaluator,              list_command_docs }            },
+    { "undef",           command{ undef_command_evaluator,             undef_command_docs }           },
     { "tokens",          command{ tokens_command_evaluator,            tokens_command_docs }          },
     { "ast",             command{ ast_command_evaluator,               ast_command_docs }             },
     { "help",            command{ help_command_evaluator,              help_command_docs }            },
@@ -1145,7 +1147,7 @@ std::string info_command_docs(COMMAND_PARAMS)
 
     ts.expect_eof();
 
-    return "Usage: $W$*info symbol1$0 $K[symbol2...]$0\n"
+    return "Usage: $W$*info symbol10 $K[symbol...]$0\n"
            "Displays information about the given symbols.\n"
            "The symbols can be variables, functions, or operators.\n"
            "Example:\n"
@@ -1349,6 +1351,34 @@ std::string list_command_evaluator(COMMAND_PARAMS)
     }
 
     return output;
+}
+
+/// Display help message for the command `undef`.
+std::string undef_command_docs(COMMAND_PARAMS)
+{
+    token_stream ts(expr, args);
+    ts.next(); // Consume the help command
+    ts.next(); // Consume the command name
+
+    ts.expect_eof();
+
+    return "Usage: $W$*undef symbol$0 $K[symbol...]$0"
+           "Undefines or deletes a symbol.\n"
+           "The symbols can be variables, functions, or operators.\n"
+           "Example:\n"
+           "  $*undef x$0\n"
+           "  $*undef x y$0\n"
+           "  $*undef +$0\n";
+}
+
+/// `undef` command: Undefines or deletes a symbol.
+///
+/// Syntax:
+/// - `undef symbol`
+/// - `undef symbol1 symbol2...`
+std::string undef_command_evaluator(COMMAND_PARAMS)
+{
+
 }
 
 /// Display help message for the command `tokens`.

@@ -1,6 +1,7 @@
 # Fluxins Expression Parser/Evaluator
-[![C++](https://img.shields.io/badge/C++-23-blue.svg)](https://en.cppreference.com/w/cpp)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](license.md)
+[![Uses C++23](https://img.shields.io/badge/C++-23-blue.svg)](https://en.cppreference.com/w/cpp)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](license.md)
+[![Latest Version v1.0.1](https://img.shields.io/badge/Latest-v1.0.1-yellow.svg)](https://github.com/anstropleuton/fluxins/releases/latest)
 
 **Fluxins** is a lightweight expression parser and evaluator written in modern C++. It has **no dependencies\*, simple integration, and is highly customizable**.
 
@@ -151,9 +152,19 @@ Here,
 - `then()` and `else()` return if condition matched, otherwise 0.
 Note: none of these function are part of the fluxins.
 
-# Future plans/considerations
+# Future plans/considerations/TODOs
 
-- Comments support in the expression.
+- Comments support in the expression (?).
+  - Perhaps the comments start with `#`?
+- Allow the tokenizer to validly tokenize additional symbolic characters:
+  - Operators: `` ` `` `@` `#` `$` `(` `)` `{` `}` `\` `;` `,` `.`
+  - Punctuations: `~` `!` `%` `^` `&` `*` `-` `+` `=` `[` `]` `|` `:` `<` `>` `/` `?`
+- Tokenize strings too for easier extendability.
+- Combine `fluxins::config` and `fluxins::context`.
+- Rename token type `identifier` to a more general term that can include keywords or commands for expressive extendability.
+- Rephrase "symbol" to mean only "operator" and find another term collective of both "variable" and "function".
+  - Currently "symbol" refers to operator, variable and/or function, and even keyboard symbol characters. Yikes!
+  - Perhaps the term "identifier" referring to variable and function collectively.
 
 # Local vs. Global
 
@@ -206,7 +217,11 @@ Binary operators:
 - `>?` - Max operator.
 - `?` and `:` - Conditional operator. `1 ? 2 : 3` yields 2 and `0 ? 2 : 3` yields 3 (syntax is `condition ? true_value : false_value`).
 
-# Default binary operator precedence table (highest to lowest)
+# Precedence Table
+
+This is the default precedence table for binary operator.
+
+Note that the lower precedence value means higher precedence, i.e., operators with precedence 0 is the most precedent operator.
 
 | Precedence | Operator                         |
 |-----------:|:---------------------------------|
@@ -224,13 +239,13 @@ Binary operators:
 |         11 | `==`, `!=`, `<`, `>`, `<=`, `>=` |
 |         12 | `&&`, `\|\|`                     |
 
-# List of all the variables and functions
+# Symbols List
 
 There are **17 variables** and **70 functions** defined as of release 1.0.0. For the full list of all the variables and functions, see [builtins.cpp](source/builtins.cpp).
 
 More functions are to be added when C++26 is released and compilers support are ready (namely [saturated arithmetic](https://en.cppreference.com/w/cpp/numeric#Saturation_arithmetic) such as `add_sat`, `sub_sat`).
 
-# More examples
+# More Examples
 
 There are a few examples that I have created to demonstrate Fluxins.
 - [usage.cpp](example/usage.cpp): Demonstrates **general usage** of Fluxins. This is a larger example and covers wider areas compared to the [Quick-Start Example](#quick-start-example).
@@ -239,7 +254,7 @@ There are a few examples that I have created to demonstrate Fluxins.
 
 # Contributing
 
-Feel free to contribute to this project by code (see [contributing.md](contributing.md)), by suggesting your ideas, or even by reporting a bugfix.
+Feel free to contribute to this project by code (see [contributing.md](contributing.md)), by suggesting your ideas, or even by reporting a bug.
 
 # Credits
 

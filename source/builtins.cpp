@@ -3,11 +3,8 @@
 /// @authors   Anstro Pleuton <https://github.com/anstropleuton>
 /// @copyright Copyright (c) 0025 Anstro Pleuton
 ///
-/// Fluxins built-in global variables and functions.
-///
-/// This file contains list of all the built-in default global variables and
-/// functions (collectively: symbols) that the context's default constructor
-/// initializes.
+/// This source file contains list of all the built-in default global variables,
+/// functions and operators defined in Fluxins.
 ///
 /// This project is licensed under the terms of MIT License.
 

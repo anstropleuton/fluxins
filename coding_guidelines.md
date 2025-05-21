@@ -1,4 +1,4 @@
-# Coding Guidelines for Fluxins
+# Coding Guidelines
 
 Style guidelines and formatting rules are not covered here, as they are specified in the `.clang-format` file. Be sure to use ClangFormat to format your code before committing.
 

@@ -3,7 +3,7 @@
 /// @authors   Anstro Pleuton <https://github.com/anstropleuton>
 /// @copyright Copyright (c) 2025 Anstro Pleuton
 ///
-/// Executable source file for Fluxins.
+/// This source file contains main executable for the project.
 ///
 /// This project is licensed under the terms of MIT License.
 

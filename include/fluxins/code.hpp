@@ -3,9 +3,9 @@
 /// @authors   Anstro Pleuton <https://github.com/anstropleuton>
 /// @copyright Copyright (c) 2025 Anstro Pleuton
 ///
-/// Provides a way to store code instead of it just being a string.
-/// It stores reporting-related utilities along with the code, such as newline
-/// locations.
+/// This header file provides a way to store code instead of it just being a
+/// string It stores reporting-related utilities along with the code, such as
+/// newline locations.
 ///
 /// This project is licensed under the terms of MIT License.
 

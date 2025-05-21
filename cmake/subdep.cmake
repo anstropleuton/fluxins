@@ -1,4 +1,21 @@
-function(ronminial_add DEP_NAME)
+# Subordinate Dependency (subdep) is a CMake module for adding dependency from
+# various sources, mainly Git Submodules.
+#
+# Dependencies are added from one of 4 sources, and each sources are checked
+# individually based on their priority.
+#
+# 1. From custom path: Define a variable <DEPENDENCY_NAME>_PATH to add
+#    dependency from that custom path.
+# 2. From initialized submodule: Initialize a git submodule using
+#    ```bash
+#    git submodule init deps/dependency_name --update --recursive
+#    ```
+#    to add dependency from the git submodule path.
+# 3. System-installed: Install dependency in your system to be used.
+# 4. Initialize submodule: Automatically initialize a git submodule and add
+#    dependency from the submodule path.
+
+function(subdep_add DEP_NAME)
     string(TOUPPER "${DEP_NAME}" DEP_NAME_UPPER)
 
     # 1. Use custom path

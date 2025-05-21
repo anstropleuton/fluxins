@@ -1,6 +1,6 @@
-include("${CMAKE_SOURCE_DIR}/cmake/ronminial.cmake")
+include("${CMAKE_SOURCE_DIR}/cmake/subdep.cmake")
 
-ronminial_add(doctest)
+subdep_add(doctest)
 
 set(FLUXINS_TESTS
     basic

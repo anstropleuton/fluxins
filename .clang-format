@@ -1,4 +1,4 @@
-# Fluxins Formatting Style
+# Formatting Style
 # See the list of all options: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 
 BasedOnStyle: Google
