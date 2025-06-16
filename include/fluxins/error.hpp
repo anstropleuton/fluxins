@@ -46,7 +46,7 @@ struct code_location {
     std::string preview_text(const code &expr, int padding = 0) const;
 };
 
-/// Code error exception, also contains details about the error and location of
+/// Error within the code, also contains details about the error and location of
 /// the error in the code.
 ///
 /// The "formatted message" is a string that contains the error message, the
@@ -64,9 +64,9 @@ struct code_location {
 ///       instead of its subclasses for uncategorized errors, such as division
 ///       by zero.
 struct code_error : std::exception {
-    std::string   message;     ///< Message of the error.
-    code          source_code; ///< Reference to the code.
-    code_location location;    ///< Location in the code that caused the error.
+    std::string   message;  ///< Message of the error.
+    code          expr;     ///< Reference to the code.
+    code_location location; ///< Location in the code that caused the error.
 
     std::string formatted_message; ///< Stores the formatted message (for `what()`).
 

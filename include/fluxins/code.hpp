@@ -91,20 +91,6 @@ struct code {
     /// @exception std::out_of_range Thrown when position is out of range.
     std::pair<std::size_t, std::size_t> get_line_col(std::size_t pos) const;
 
-    /// Get line as string from the line number.
-    ///
-    /// @note Line number starts from 1.
-    ///
-    /// @exception std::out_of_range Thrown when line number is out of range.
-    std::string get_line(std::size_t line_number) const;
-
-    /// Get lines as string from a range of line numbers.
-    ///
-    /// @note Line numbers starts from 1.
-    ///
-    /// @exception std::out_of_range Thrown when line number is out of range.
-    std::vector<std::string> get_lines(std::size_t begin_ln, std::size_t end_ln) const;
-
     operator std::string()
     {
         return expr;

@@ -7,7 +7,6 @@ add_library(fluxins
 )
 target_include_directories(fluxins PUBLIC
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 target_compile_features(fluxins PUBLIC cxx_std_23)

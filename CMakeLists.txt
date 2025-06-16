@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(fluxins
     DESCRIPTION "Fluxins is a lightweight expression parser and evaluator written in modern C++."
-    VERSION 1.0.1
+    VERSION 1.0.2
     LANGUAGES CXX)
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)

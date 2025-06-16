@@ -2,7 +2,9 @@
 
 Welcome, contributors! Thank you for showing your interest in contributing to Fluxins! I welcome your contributions, whether it is a bug report, feature request, or code contribution.
 
-There is not much strict structure of contributing to this project (e.g., no specific format for commit messages, no specific branch naming conventions, etc.). Feel free to contribute in any way you like or makes sense to you. However, I do have some [guidelines for coding standards](coding_guidelines.md) that I would like you to follow. This will help ensure that the code is consistent and easy to read.
+There is not much strict structure of contributing to this project (e.g., no specific format for commit messages, no specific branch naming conventions, etc.). Feel free to contribute in any way you like or makes sense to you.
+
+However, I do have some [guidelines for coding standards](coding_guidelines.md) that I would like you to follow. This will help ensure that the code is consistent and easy to read.
 
 TL;DR: Feel free to contribute in any meaningful way, and be sure to run the tests.
 

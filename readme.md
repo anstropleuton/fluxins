@@ -1,11 +1,11 @@
 # Fluxins Expression Parser/Evaluator
 [![Uses C++23](https://img.shields.io/badge/C++-23-blue.svg)](https://en.cppreference.com/w/cpp)
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](license.md)
-[![Latest Version v1.0.1](https://img.shields.io/badge/Latest-v1.0.1-yellow.svg)](https://github.com/anstropleuton/fluxins/releases/latest)
+[![Latest Version v1.0.2](https://img.shields.io/badge/Latest-v1.0.2-yellow.svg)](https://github.com/anstropleuton/fluxins/releases/latest)
 
 **Fluxins** is a lightweight expression parser and evaluator written in modern C++. It has **no dependencies\*, simple integration, and is highly customizable**.
 
-Fluxins provides a flexible way to **parse and evaluate expressions** from strings. It is designed to be easily integrated into multiple systems, including user-facing applications, which allows them to input an expression that can be automatically evaluated. This allows users to perform quick operation directly a text field, without having to pull up a calculator.
+Fluxins provides a flexible way to **parse and evaluate expressions** from strings. It is designed to be easily integrated into multiple systems, including user-facing applications, which allows them to input an expression that can be automatically evaluated. This allows users to perform quick operation directly in a text field, without having to pull up a calculator.
 
 Fluxins can be useful in scenarios where **flexible value evaluation** is needed, but a simple lambda won't cut it. A prime example for this is in a GUI framework, where programmer can enter an expression that queries related data (e.g., parent container's width) within the expression, and apply transformations (like calculating a child container's max width).
 
@@ -15,34 +15,36 @@ The **integration possibilities are endless**, basically. You can also customize
 
 # Prerequisite
 
-- A C++ compiler that supports C++23 (GCC 12+, Clang 15+, MSVC 19.30+)
+- A C++ compiler that supports [C++23](https://en.cppreference.com/w/cpp/compiler_support/23)
 - CMake 3.15 or higher
 - [doctest](https://github.com/doctest/doctest) (for testing)
 
 # Building
 
 - Clone the repository
-```bash
-git clone https://github.com/anstropleuton/fluxins.git
-```
+  ```bash
+  git clone https://github.com/anstropleuton/fluxins.git
+  ```
 - Create a build directory
-```bash
-mkdir build
-cd build
-```
+  ```bash
+  mkdir build
+  cd build
+  ```
 - Build the project
-```bash
-cmake ..
-cmake --build . --config Release
-```
+  ```bash
+  cmake ..
+  cmake --build . --config Release
+  ```
 - Install the project (optional; UNIX-like systems)
-```bash
-sudo cmake --install . --config Release
-```
+  ```bash
+  sudo cmake --install . --config Release
+  ```
 
 # Quick-Start Example
 
-Add your project as a subdirectory in your CMakeLists.txt:
+If you are looking to experiment with just the expressions and features of this parser, check out the [REPL example](example/repl.cpp).
+
+If you are ready to dive into the APIs, add your project as a subdirectory in your CMakeLists.txt:
 ```cmake
 add_subdirectory(fluxins)
 ```
@@ -50,12 +52,16 @@ add_subdirectory(fluxins)
 If your project does not use CMake for your project, you can use CMake to build Fluxins as a static library, set up include paths, and link the library to your project.
 
 ```cpp
+#include <print>
+#include <memory>
+#include <string>
+
 #include "fluxins/fluxins.hpp"
 
 int main()
 {
     // This is just a quick-start example. Also see the other examples from the
-    // [example](example) directory to learn more.
+    // example directory to learn more.
 
     // Create a configuration for parser and evaluator
     auto cfg = std::make_shared<fluxins::config>();
@@ -97,42 +103,43 @@ int main()
 }
 ```
 
-For other usage examples, including customizing functions or operators, see [example](example) directory.
+For other usage examples, including customizing functions or operators, see the examples in the [example](example) directory.
 
 # Features
 
-Expression features:
+**Expression features**:
 - Numbers (duh)
   - Both integers and floating-point numbers are interpreted as float type.
   - Separate digits using ```'``` or ```_``` character.
   - Don't use the 'f' suffix for floats, as you would do in C++.
   - Conversion to integral value in specific contexts is done by flooring, not truncating.
 - Parenthesis: `(` and `)`
-- Basic operators: `+`, `-`, `*`, `/`, `%` (modulo/remainder), `%%` (wrapping modulo), `**` (exponent/power), `//` (flooring division)
-- Relational operators: `==`, `!=`, `<`, `>`, `<=`, `>=`
-- Boolean conditional operators: `&&`, `||`, `!`
-- Integral bitwise operators: `&`, `|`, `^`, `~`, `<<`, `>>`
-- Absolute difference operator: `!!`
-- Min and Max operator: `<?` and `>?`.
-- Zero-coalescing operator: `value ?? value_if_zero`
-- Conditional operator: `condition ? true_value : false_value`
+- Operators:
+  - Basic operators: `+`, `-`, `*`, `/`, `%` (modulo/remainder), `%%` (wrapping modulo), `**` (exponent/power), `//` (flooring division)
+  - Relational operators: `==`, `!=`, `<`, `>`, `<=`, `>=`
+  - Boolean conditional operators: `&&`, `||`, `!`
+  - Integral bitwise operators: `&`, `|`, `^`, `~`, `<<`, `>>`
+  - Absolute difference operator: `!!`
+  - Min and Max operator: `<?` and `>?`.
+  - Zero-coalescing operator: `value ?? value_if_zero`
+  - Conditional operator: `condition ? true_value : false_value`
 - Variables: `var` \*
 - Functions: `fn(args)`
 
 \*: Technically, an expression cannot modify a variable, and the term "constant" may have made more sense. But the term "variable" is chosen due to the common use of identifiers as a variable in the code.
 
-Customizations:
+**Customizations**:
 - Custom variables: Append your custom variable in list of variables.
 - Custom functions: Append your custom function in list of functions.
 - Multiple contexts for storing global symbols.
 - Inherit symbols from other contexts.
 - Custom operators: Append your custom operator in the parser config.
 
-Other features:
+**Other features**:
 - **Thread Safety**: Fluxins is thread safe, as long as you do not mutate configurations or contexts from multiple threads at the same time. Thread safety is on your hand.
 - **Error Reporting**: Parsing and evaluating can throw `code_error` exception which contains information about the error, along with location of the error within the expression, such as syntax error or missing function.
 - **Caching**: Expression's AST and evaluated value is cached. If you change the expression, you would need to re-parse and re-evaluate the expression. If you change the context (symbols), you would only need to re-evaluat the expression.
-- **Built-in Variables and Functions**: There are several built-in variables and functions that expressions can access. **Variables** include `e`, `pi`, `phi`, `sqrt2`, `inv_sqrt3`, `inv_pi`, etc. while **Functions** include `abs(x)`, `sin(x)`, `pow(x, y)`, `min(...)`, `clamp(x,min,max)`, `avg(...)`, etc.
+- **Built-in Variables and Functions**: There are several built-in variables and functions that expressions can access. **Variables** include `e`, `pi`, `phi`, `sqrt2`, `inv_sqrt3`, `inv_pi`, etc. while **Functions** include `abs(x)`, `sin(x)`, `pow(x, y)`, `min(...)`, `clamp(x,min,max)`, `avg(...)`, etc. See [Symbols List](#symbols-list).
 
 # Anti-features
 
@@ -165,18 +172,23 @@ Note: none of these function are part of the fluxins.
 - Rephrase "symbol" to mean only "operator" and find another term collective of both "variable" and "function".
   - Currently "symbol" refers to operator, variable and/or function, and even keyboard symbol characters. Yikes!
   - Perhaps the term "identifier" referring to variable and function collectively.
+- Instead of throwing when an exception immediately when the first error in the expression is seen, maybe return a list of all the errors within the expression.
+- Remove `code` data type completely.
+- Rename `code_location` to `text_range` and inherit text formatting features from [Optrone](https://github.com/anstropleuton/optrone), which are inspired by Fluxin's [REPL example](example/repl.cpp) so it's a full cycle...
 
-# Local vs. Global
+# General Information
+
+## Local vs. Global
 
 Fluxins uses context to obtain list of variables or functions (collectively: symbols). This allows flexibility of providing symbols only to specific expressions or allowing them to inherit from other contexts. This allows global sharing of symbols.
 
-# Parsing and Grammar
+## Parsing and Grammar
 
 The expression consists of tokens, i.e., identifiers, numbers, operators and punctuations. The whitespace is ignored by the parser, so feel free to use it to make your expression readable.
 
 The grammar is similar to that of most programming language. Operators have precedence and parentheses override operator precedence and are evaluated first. They can be also nested.
 
-# List of all default operators
+## List of all default operators
 
 Unary prefix operators:
 - `+` - Unary addition operator, one operand (at the right), has no effect (same as 0 + x).
@@ -217,7 +229,7 @@ Binary operators:
 - `>?` - Max operator.
 - `?` and `:` - Conditional operator. `1 ? 2 : 3` yields 2 and `0 ? 2 : 3` yields 3 (syntax is `condition ? true_value : false_value`).
 
-# Precedence Table
+## Precedence Table
 
 This is the default precedence table for binary operator.
 
@@ -239,9 +251,9 @@ Note that the lower precedence value means higher precedence, i.e., operators wi
 |         11 | `==`, `!=`, `<`, `>`, `<=`, `>=` |
 |         12 | `&&`, `\|\|`                     |
 
-# Symbols List
+## Symbols List
 
-There are **17 variables** and **70 functions** defined as of release 1.0.0. For the full list of all the variables and functions, see [builtins.cpp](source/builtins.cpp).
+There are **17 variables** and **70 functions** defined as of release 1.0.0. For the full list of all the variables and functions, see the full list of [built-in functions and variables](source/builtins.cpp).
 
 More functions are to be added when C++26 is released and compilers support are ready (namely [saturated arithmetic](https://en.cppreference.com/w/cpp/numeric#Saturation_arithmetic) such as `add_sat`, `sub_sat`).
 
@@ -265,5 +277,7 @@ Thanks to Nuno Pinheiro (can't find link) for the background Elarun. But I did f
 Thanks to [patorjk](https://www.patorjk.com) for [Text to ASCII Art Generator](https://www.patorjk.com/software/taag).
 
 # License
+
+Copyright (c) 2025 Anstro Pleuton.
 
 This project is licensed under the terms of MIT License. See [license.md](license.md) for more info.

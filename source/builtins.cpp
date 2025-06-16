@@ -4,7 +4,7 @@
 /// @copyright Copyright (c) 0025 Anstro Pleuton
 ///
 /// This source file contains list of all the built-in default global variables,
-/// functions and operators defined in Fluxins.
+/// functions and operators.
 ///
 /// This project is licensed under the terms of MIT License.
 

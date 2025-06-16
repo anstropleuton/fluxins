@@ -121,7 +121,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include "fluxins/fluxins.hpp"
+#include "fluxins/code.hpp"
+#include "fluxins/config.hpp"
+#include "fluxins/context.hpp"
+#include "fluxins/error.hpp"
+#include "fluxins/parser.hpp"
 
 using namespace fluxins;
 
@@ -1378,7 +1382,6 @@ std::string undef_command_docs(COMMAND_PARAMS)
 /// - `undef symbol1 symbol2...`
 std::string undef_command_evaluator(COMMAND_PARAMS)
 {
-
 }
 
 /// Display help message for the command `tokens`.

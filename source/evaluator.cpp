@@ -3,7 +3,7 @@
 /// @authors   Anstro Pleuton <https://github.com/anstropleuton>
 /// @copyright Copyright (c) 2025 Anstro Pleuton
 ///
-/// This source file provides implementation for evaluataion in Fluxins.
+/// This source file provides implementation for evaluataion.
 ///
 /// This project is licensed under the terms of MIT License.
 

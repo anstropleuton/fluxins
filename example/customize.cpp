@@ -9,7 +9,11 @@
 
 #include <memory>
 #include <print>
-#include "fluxins/fluxins.hpp"
+
+#include "fluxins/config.hpp"
+#include "fluxins/context.hpp"
+#include "fluxins/error.hpp"
+#include "fluxins/expression.hpp"
 
 int main()
 {

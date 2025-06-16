@@ -3,8 +3,8 @@
 /// @authors   Anstro Pleuton <https://github.com/anstropleuton>
 /// @copyright Copyright (c) 2025 Anstro Pleuton
 ///
-/// This test file tests all the default operators in Fluxins along with it's
-/// precedence and associativity.
+/// This test file tests all the default operators along with it's precedence
+/// and associativity.
 ///
 /// This project is licensed under the terms of MIT License.
 

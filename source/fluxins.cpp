@@ -3,13 +3,14 @@
 /// @authors   Anstro Pleuton <https://github.com/anstropleuton>
 /// @copyright Copyright (c) 2025 Anstro Pleuton
 ///
-/// This source file provides implementation for misc. stuff in Fluxins.
+/// This source file provides implementation for misc. stuff.
 ///
 /// This project is licensed under the terms of MIT License.
 
 #include <algorithm>
 #include <cstddef>
 #include <cstdlib>
+#include <exception>
 #include <format>
 #include <iomanip>
 #include <ios>
@@ -73,34 +74,6 @@ std::pair<std::size_t, std::size_t> fluxins::code::get_line_col(std::size_t pos)
     }
 
     throw std::out_of_range("Position is out of range");
-}
-
-std::string fluxins::code::get_line(std::size_t line_number) const
-{
-    if (line_number == 0 || line_number > lines.size())
-    {
-        throw std::out_of_range("Line number is out of range");
-    }
-
-    auto [begin, length] = lines[line_number - 1];
-    return expr.substr(begin, length);
-}
-
-std::vector<std::string> fluxins::code::get_lines(std::size_t begin_ln, std::size_t end_ln) const
-{
-    if (begin_ln == 0 || end_ln > lines.size() || begin_ln > end_ln)
-    {
-        throw std::out_of_range("Line number is out of range");
-    }
-
-    std::vector<std::string> result;
-    for (std::size_t i = begin_ln - 1; i < end_ln; i++)
-    {
-        auto [begin, length] = lines[i];
-        result.emplace_back(expr.substr(begin, length));
-    }
-
-    return result;
 }
 
 void fluxins::config::add_unary_prefix_op(const unary_operator &op)
@@ -434,7 +407,8 @@ std::string fluxins::code_location::preview_text(const code &expr, int padding) 
         out << std::string(padding, ' ');
 
         out << std::setw(width) << ln << " | "
-            << expr.get_line(ln) << "\n";
+            << expr.expr.substr(expr.lines[ln - 1].first, expr.lines[ln - 1].second)
+            << "\n";
 
         // Marker line
         out << std::string(padding, ' ');
@@ -463,17 +437,21 @@ std::string fluxins::code_location::preview_text(const code &expr, int padding) 
 }
 
 fluxins::code_error::code_error(std::string_view message, const code &expr, code_location location)
-    : message(message), source_code(expr), location(location)
+try
+    : message(message), expr(expr), location(location)
 {
     std::ostringstream oss;
-    auto [begin_line, begin_col] = source_code.get_line_col(location.begin);
-    auto [end_line, end_col]     = source_code.get_line_col(location.begin + location.length - 1);
-    oss << source_code.name << ": "
+    auto [begin_line, begin_col] = expr.get_line_col(location.begin);
+    auto [end_line, end_col]     = expr.get_line_col(location.begin + location.length - 1);
+    oss << expr.name << ": "
         << begin_line << ":" << begin_col << "-"
         << end_line << ":" << end_col << ": "
         << message << "\n"
-        << location.preview_text(source_code);
+        << location.preview_text(expr);
     formatted_message = oss.str();
+}
+catch (const std::exception &e)
+{
 }
 
 fluxins::invalid_arity::invalid_arity(std::string_view function, std::size_t args_count, std::size_t arity, const code &expr, code_location location)
