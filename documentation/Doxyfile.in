@@ -6,7 +6,7 @@ PROJECT_BRIEF          = "@PROJECT_DESCRIPTION@"
 PROJECT_LOGO           = favicon.ico
 PROJECT_ICON           = favicon.ico
 
-OUTPUT_DIRECTORY       = @CMAKE_CURRENT_BINARY_DIR@
+OUTPUT_DIRECTORY       = @FLUXINS_BINARY_DIR@/documentation
 INPUT                  = ../include/@PROJECT_NAME@ ../changelog.md ../contributing.md ../coding_guidelines.md ../license.md ../readme.md
 USE_MDFILE_AS_MAINPAGE = ../readme.md
 
