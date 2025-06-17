@@ -164,8 +164,8 @@ Note: none of these function are part of the fluxins.
 - Comments support in the expression (?).
   - Perhaps the comments start with `#`?
 - Allow the tokenizer to validly tokenize additional symbolic characters:
-  - Operators: `` ` `` `@` `#` `$` `(` `)` `{` `}` `\` `;` `,` `.`
-  - Punctuations: `~` `!` `%` `^` `&` `*` `-` `+` `=` `[` `]` `|` `:` `<` `>` `/` `?`
+  - Punctuations: `` ` `` `@` `#` `$` `(` `)` `{` `}` `\` `;` `,` `.`
+  - Operators: `~` `!` `%` `^` `&` `*` `-` `+` `=` `[` `]` `|` `:` `<` `>` `/` `?`
 - Tokenize strings too for easier extendability.
 - Combine `fluxins::config` and `fluxins::context`.
 - Rename token type `identifier` to a more general term that can include keywords or commands for expressive extendability.

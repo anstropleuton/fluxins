@@ -5,6 +5,9 @@ project(fluxins
     VERSION 1.0.2
     LANGUAGES CXX)
 
+set(FLUXINS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+set(FLUXINS_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     option(BUILD_TESTS "Build tests" ON)
@@ -20,7 +23,7 @@ endif()
 
 find_program(IWYU_PATH NAMES include-what-you-use iwyu)
 if(IWYU_PATH)
-    set(IWYU_MAPPING "${CMAKE_SOURCE_DIR}/.iwyu.imp")
+    set(IWYU_MAPPING "${FLUXINS_SOURCE_DIR}/.iwyu.imp")
     set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_PATH};-Xiwyu;--mapping_file=${IWYU_MAPPING}")
 endif()
 
@@ -36,8 +39,8 @@ if(BUILD_PACKAGE)
     set(CPACK_PACKAGE_CONTACT "Anstro Pleuton (https://github.com/anstropleuton)")
     set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
     set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/anstropleuton/fluxins")
-    set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/license.md")
-    set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/readme.md")
+    set(CPACK_RESOURCE_FILE_LICENSE "${FLUXINS_SOURCE_DIR}/license.md")
+    set(CPACK_RESOURCE_FILE_README "${FLUXINS_SOURCE_DIR}/readme.md")
 
     set(CPACK_GENERATOR "TGZ;ZIP")
 
@@ -59,11 +62,11 @@ endif()
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     configure_file(
-        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
-        "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
+        "${FLUXINS_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+        "${FLUXINS_BINARY_DIR}/cmake_uninstall.cmake"
         IMMEDIATE @ONLY
     )
     add_custom_target(uninstall
-        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake
+        COMMAND ${CMAKE_COMMAND} -P ${FLUXINS_BINARY_DIR}/cmake_uninstall.cmake
     )
 endif()
